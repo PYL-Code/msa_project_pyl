@@ -1,9 +1,6 @@
 package edu.du.msa_project_pyl.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -18,8 +15,15 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title; // 여행 패키지 제목
+
+    @Column(nullable = false)
     private String destination; // 여행지
-    private int duration; // 여행 기간 (일 단위)
-    private double price; // 가격
+
+    @Column(nullable = false)
+    private int price; // 가격
+
+    @Column(nullable = false)
+    private String duration; // 여행 기간 (일 단위)
 }
