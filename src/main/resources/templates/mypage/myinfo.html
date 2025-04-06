@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지 - 개인정보</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            max-width: 1000px;
+            margin: 20px auto;
+        }
+        .sidebar {
+            width: 250px;
+            border-right: 2px solid #ddd;
+            padding: 20px;
+        }
+        .sidebar a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: black;
+        }
+        .sidebar a:hover {
+            background: #f0f0f0;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        h2 {
+            color: #008000; /* 초록색 */
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            background: #008000;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .btn:hover {
+            background: #006400;
+        }
+        .danger {
+            background: #ff4444;
+        }
+        .danger:hover {
+            background: #cc0000;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="sidebar">
+        <h2>마이페이지</h2>
+        <a href="/mypage">마이페이지 홈</a>
+        <a href="/mypage/myinfo">개인정보 관리</a>
+        <a href="/mypage/reservations">예약 관리</a>
+        <a href="/mypage/coupons">쿠폰함</a>
+    </div>
+
+    <div class="content">
+        <h2>개인정보 관리</h2>
+        <form id="userForm">
+            <label>아이디</label>
+            <input type="text" id="userId" readonly>
+
+            <label>이름</label>
+            <input type="text" id="name">
+
+            <label>이메일</label>
+            <input type="email" id="email">
+
+            <label>전화번호</label>
+            <input type="text" id="phone">
+
+            <label>주소</label>
+            <input type="text" id="address">
+
+            <label>우편번호</label>
+            <input type="text" id="postcode">
+
+            <button type="button" class="btn" onclick="updateUser()">수정하기</button>
+            <button type="button" class="btn danger" onclick="deleteUser()">회원 탈퇴</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        loadUserInfo();
+    });
+
+    function loadUserInfo() {
+        let id = sessionStorage.getItem("id")
+        $.get(`/api/user/userInfo?id=${id}`, function(user) {
+            $("#userId").val(user.userId);
+            $("#name").val(user.name);
+            $("#email").val(user.email);
+            $("#phone").val(user.phone);
+            $("#address").val(user.address);
+            $("#postcode").val(user.postcode);
+        });
+    }
+
+    function updateUser() {
+        let id = sessionStorage.getItem("id")
+        let user = {
+            id: id,
+            userId: $("#userId").val(),
+            name: $("#name").val(),
+            email: $("#email").val(),
+            phone: $("#phone").val(),
+            address: $("#address").val(),
+            postcode: $("#postcode").val()
+        };
+
+        $.ajax({
+            url: `/api/user/update/${id}`,
+            type: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify(user),
+            success: function() {
+                alert("회원 정보가 수정되었습니다.");
+            }
+        });
+    }
+
+    function deleteUser() {
+        let id = sessionStorage.getItem("id")
+        if (confirm("정말 탈퇴하시겠습니까?")) {
+            $.ajax({
+                url: `/api/user/delete?id=${id}`,
+                type: "DELETE",
+                success: function() {
+                    alert("회원 탈퇴가 완료되었습니다.");
+                    window.location.href = "/";
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>
