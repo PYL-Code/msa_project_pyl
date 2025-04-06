@@ -32,7 +32,7 @@
 
 <script>
 import axios from "axios";
-import Sidebar from "../components/Sidebar.vue";
+import Sidebar from "../components/sidebar.vue";
 
 export default {
   components: {
