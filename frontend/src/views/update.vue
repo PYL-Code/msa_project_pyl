@@ -19,7 +19,10 @@
         <input v-model="user.address" type="text" />
 
         <label>우편번호</label>
-        <input v-model="user.postcode" type="text" />
+        <div class="postcode-row">
+          <input v-model="user.postcode" type="text" readonly />
+          <button type="button" class="btn search" @click="openPostcode">우편번호 찾기</button>
+        </div>
 
         <div class="button-group">
           <button class="btn cancel" @click="$router.go(-1)">취소</button>
@@ -72,6 +75,31 @@ export default {
         console.error("수정 오류:", err);
         alert("수정에 실패했습니다.");
       }
+    },
+    openPostcode() {
+      new window.daum.Postcode({
+        oncomplete: (data) => {
+          // 주소 형식 설정
+          let fullAddress = data.address;
+          let extraAddress = "";
+
+          if (data.addressType === "R") {
+            if (data.bname !== "") {
+              extraAddress += data.bname;
+            }
+            if (data.buildingName !== "") {
+              extraAddress += (extraAddress ? ", " + data.buildingName : data.buildingName);
+            }
+            if (extraAddress !== "") {
+              fullAddress += " (" + extraAddress + ")";
+            }
+          }
+
+          // 주소와 우편번호 데이터 바인딩
+          this.user.postcode = data.zonecode;
+          this.user.address = fullAddress;
+        },
+      }).open();
     },
   },
 };
@@ -142,5 +170,22 @@ h2 {
 
 .cancel:hover {
   background-color: #999;
+}
+
+.postcode-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.search {
+  background-color: #006400;
+  color: white;
+  padding: 8px 14px;
+}
+
+.search:hover {
+  background-color: #004d00;
 }
 </style>
