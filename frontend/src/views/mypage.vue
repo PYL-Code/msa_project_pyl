@@ -49,6 +49,8 @@
 <script>
 import axios from "axios";
 import Sidebar from "../components/sidebar.vue";
+import { parseJwt } from "../utils/jwtUtils.js"
+import createFakeJwt from "../utils/fakeJwt.js";
 
 export default {
   components: {
@@ -75,7 +77,21 @@ export default {
   },
   methods: {
     async loadUserInfo() {
-      const id = 1; // TODO : JWT로 대체 예정
+      // const token = localStorage.getItem('token')
+      const token = createFakeJwt(); //TODO : 추후 삭제 (Fake JWT)
+      if (!token) {
+        alert('로그인이 필요합니다.')
+        this.$router.push('/signin')
+        return
+      }
+
+      const payload = parseJwt(token)
+      const id = payload?.id || payload?.userId || payload?.sub
+      if (!id) {
+        console.error('토큰에 사용자 ID가 없습니다.')
+        return
+      }
+
       try {
         const res = await axios.get(`http://localhost:9876/api/user/${id}`);
         this.user = res.data;
@@ -84,8 +100,23 @@ export default {
       }
     },
     async loadReservations() {
+      // const token = localStorage.getItem('token')
+      const token = createFakeJwt(); //TODO : 추후 삭제 (Fake JWT)
+      if (!token) {
+        alert('로그인이 필요합니다.')
+        this.$router.push('/signin')
+        return
+      }
+
+      const payload = parseJwt(token)
+      const id = payload?.id || payload?.userId || payload?.sub
+      if (!id) {
+        console.error('토큰에 사용자 ID가 없습니다.')
+        return
+      }
+
       try {
-        const res = await axios.get("http://localhost:9876/api/reservation");
+        const res = await axios.get(`http://localhost:9876/api/reservation/${id}`);
         this.reservations = res.data;
       } catch (err) {
         console.error("예약 정보 에러:", err);

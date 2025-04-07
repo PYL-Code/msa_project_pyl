@@ -26,4 +26,7 @@ public class Reservation {
 
     @Column(nullable = false)
     private String duration; // 여행 기간 (일 단위)
+
+    @Column(nullable = false)
+    private Long userNo;
 }

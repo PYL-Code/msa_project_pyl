@@ -17,9 +17,9 @@ public class ReservationRestController {
         this.reservationService = reservationService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Reservation>> getReservation() {
-        List<Reservation> reservations = reservationService.selectAllReservation();
+    @GetMapping("{userNo}")
+    public ResponseEntity<List<Reservation>> getReservation(@PathVariable Long userNo) {
+        List<Reservation> reservations = reservationService.selectReservationById(userNo);
         return ResponseEntity.ok(reservations);
     }
 

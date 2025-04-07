@@ -36,6 +36,8 @@
 <script>
 import axios from "axios";
 import Sidebar from "../components/sidebar.vue";
+import createFakeJwt from "../utils/fakeJwt.js"; //TODO : 추후 삭제 (FakeJWT)
+import { parseJwt } from "../utils/jwtUtils.js";
 
 export default {
   components: {
@@ -58,7 +60,21 @@ export default {
   },
   methods: {
     async loadUserInfo() {
-      const id = 1; // TODO: JWT로 id 받아오기
+      // const token = localStorage.getItem('token')
+      const token = createFakeJwt(); //TODO : 추후 삭제 (Fake JWT)
+      if (!token) {
+        alert('로그인이 필요합니다.')
+        this.$router.push('/signin')
+        return
+      }
+
+      const payload = parseJwt(token)
+      const id = payload?.id || payload?.userId || payload?.sub
+      if (!id) {
+        console.error('토큰에 사용자 ID가 없습니다.')
+        return
+      }
+
       try {
         const res = await axios.get(`http://localhost:9876/api/user/${id}`);
         this.user = res.data;

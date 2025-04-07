@@ -15,8 +15,8 @@ public class ReservationService {
         this.reservationCheckRepository = reservationCheckRepository;
     }
 
-    public List<Reservation> selectAllReservation () {
-        return reservationCheckRepository.findAll();
+    public List<Reservation> selectReservationById(Long userNo) {
+        return reservationCheckRepository.findByUserNo(userNo);
     }
 
     public void deleteReservationById(Long id) {

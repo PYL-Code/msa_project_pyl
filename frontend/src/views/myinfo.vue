@@ -35,6 +35,8 @@
 <script>
 import axios from "axios";
 import Sidebar from "../components/sidebar.vue";
+import { parseJwt } from "../utils/jwtUtils.js"
+import createFakeJwt from "../utils/fakeJwt.js"; //TODO : 추후 삭제 (FakeJWT)
 
 export default {
   components: {
@@ -58,30 +60,41 @@ export default {
   },
   methods: {
     async loadUserInfo() {
-      // TODO: JWT에서 id 추출 후 사용
-      const id = 1; //테스트 값
+      // const token = localStorage.getItem('token')
+      const token = createFakeJwt(); //TODO : 추후 삭제 (Fake JWT)
+      if (!token) {
+        alert('로그인이 필요합니다.')
+        this.$router.push('/signin')
+        return
+      }
+
+      const payload = parseJwt(token)
+      const id = payload?.id || payload?.userId || payload?.sub
+      if (!id) {
+        console.error('토큰에 사용자 ID가 없습니다.')
+        return
+      }
 
       try {
-        const response = await axios.get(`http://localhost:9876/api/user/${id}`);
-        // console.log("받은 데이터:", response.data);
-        this.user = response.data;
+        const response = await axios.get(`http://localhost:9876/api/user/${id}`)
+        this.user = response.data
       } catch (error) {
-        console.error("회원 정보를 불러오는 중 오류 발생:", error);
+        console.error("회원 정보를 불러오는 중 오류 발생:", error)
       }
     },
     async deleteUser() {
       if (!confirm("정말 탈퇴하시겠습니까?")) return;
 
       try {
-        await axios.delete(`http://localhost:9876/api/user/delete/${this.user.id}`);
-        alert("회원 탈퇴가 완료되었습니다.");
-        sessionStorage.clear();
-        this.$router.push("/");
+        await axios.delete(`http://localhost:9876/api/user/delete/${this.user.id}`)
+        alert("회원 탈퇴가 완료되었습니다.")
+        sessionStorage.clear()
+        this.$router.push("/")
       } catch (error) {
-        console.error("회원 탈퇴 오류:", error);
+        console.error("회원 탈퇴 오류:", error)
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -91,45 +104,72 @@ export default {
   max-width: 1200px;
   margin: 40px auto;
 }
+
 .content {
   flex-grow: 1;
-  padding: 30px;
+  padding: 40px 50px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 128, 0, 0.1);
 }
+
 h2 {
   color: #008000;
+  font-size: 26px;
+  margin-bottom: 30px;
 }
+
+.info-box {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 15px;
+  margin-bottom: 30px;
+}
+
 label {
-  font-weight: bold;
-  display: block;
-  margin-top: 10px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #333;
 }
+
 p {
-  margin-top: 5px;
-  padding: 8px;
+  margin: 0;
+  padding: 10px 12px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
   background: #f9f9f9;
+  font-size: 15px;
+  color: #555;
 }
+
 .btn {
   background: #008000;
   color: white;
-  padding: 10px;
+  padding: 12px 5px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  margin-top: 15px;
+  margin-top: 10px;
+  font-size: 15px;
+  transition: all 0.3s ease;
   display: inline-block;
+  min-width: 120px;
   text-align: center;
   text-decoration: none;
 }
+
 .btn:hover {
   background: #006400;
+  box-shadow: 0 4px 12px rgba(0, 128, 0, 0.3);
 }
+
 .danger {
   background: #ff4444;
-  margin-left: 10px;
+  margin-left: 12px;
 }
+
 .danger:hover {
   background: #cc0000;
+  box-shadow: 0 4px 12px rgba(255, 68, 68, 0.3);
 }
 </style>
