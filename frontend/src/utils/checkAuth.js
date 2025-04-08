@@ -10,7 +10,7 @@ export function checkAuth(router) {
 
     try {
         const payload = parseJwt(token)
-        if (!payload || !payload.id) {
+        if (!payload || !payload.no) {
             alert('유효하지 않은 토큰입니다.')
             router.push('/signin')
             return false
