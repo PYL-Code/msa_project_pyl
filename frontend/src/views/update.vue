@@ -69,7 +69,7 @@ export default {
       }
 
       const payload = parseJwt(token)
-      const id = payload?.id || payload?.userId || payload?.sub
+      const id = payload?.no;
       if (!id) {
         console.error('토큰에 사용자 ID가 없습니다.')
         return

@@ -1,5 +1,24 @@
-# Vue 3 + Vite
+# README
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## 마이페이지 기능
+- 개인정보 관리
+- 예약 확인 및 취소
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## 진행상황
+- 기본 curd 작동
+- jwt (이제 정상적으로 `no(Long)` 값을 받아와 작동합니다.)
+- 로그인 되지 않았을 경우 인터셉터
+  - 현재 `/signin` 페이지로 이동하도록 설정되어 있습니다.
+  - 기능이 정상적으로 작동하는가에 대한 검증은 필요합니다.
+- 일부 디자인 개선
+
+## 개선할 점
+- crud를 할 경우 중복 확인 등 데이터 검증은 이루어지지 않고 있습니다.
+- 디자인이 더 개선되면 좋을 것입니다.
+
+## 데이터를 주고받을 경우
+- 회원가입 한 사용자의 데이터를 받아와야 합니다.
+- 회원 관리 페이지에서 수정한 사용자의 데이터를 보내야 합니다.
+  - `id`, `pw`를 수정할 경우.
+  - 현재 `id`, `pw`를 수정하는 기능은 구현되어 있지 않습니다.
+- 예약한 여행 패키지 정보를 받아옴과 동시에 해당 사용자의 `jwt no` 값을 저장해야 합니다.

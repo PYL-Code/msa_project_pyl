@@ -32,12 +32,14 @@
               :key="r.id"
               class="reservation-card"
           >
-            <img :src="r.imgUrl" alt="여행 이미지" class="reservation-image" />
+            <div class="card-img">
+              <img :src="r.imgUrl" alt="여행 이미지" />
+            </div>
             <div class="reservation-info">
               <p class="reservation-title">{{ r.title }}</p>
               <p class="reservation-description">{{ r.description }}</p>
-              <p><strong>기간:</strong> {{ r.duration }}</p>
-              <p><strong>가격:</strong> {{ r.price.toLocaleString() }}원</p>
+              <p class="reservation-duration"><strong>기간:</strong> {{ r.duration }}</p>
+              <p class="reservation-price">{{ r.price.toLocaleString() }}원</p>
             </div>
           </div>
           <router-link to="/mypage/reservations" class="small-link"
@@ -58,6 +60,7 @@ import axios from "axios";
 import Sidebar from "../components/sidebar.vue";
 import { parseJwt } from "../utils/jwtUtils.js";
 import createFakeJwt from "../utils/fakeJwt.js";
+import reservation from "./reservation.vue";
 
 export default {
   components: {
@@ -93,7 +96,7 @@ export default {
       }
 
       const payload = parseJwt(token);
-      const id = payload?.id || payload?.userId || payload?.sub;
+      const id = payload?.no;
       if (!id) {
         console.error("토큰에 사용자 ID가 없습니다.");
         return;
@@ -116,7 +119,7 @@ export default {
       }
 
       const payload = parseJwt(token);
-      const id = payload?.id || payload?.userId || payload?.sub;
+      const id = payload?.no;
       if (!id) {
         console.error("토큰에 사용자 ID가 없습니다.");
         return;
@@ -185,63 +188,97 @@ export default {
   color: #008000;
 }
 
+/* 예약 카드 */
+.reservation-section h3 {
+  font-size: 24px;
+  color: #2e7d32;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.reservation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.reservation-card {
+  display: flex;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+  min-height: 160px;
+}
+
+
+.reservation-card:hover {
+  transform: translateY(-3px);
+}
+
+.reservation-image {
+  width: 200px;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reservation-info {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.reservation-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #006400;
+  margin-bottom: 6px;
+}
+
+.reservation-description {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.reservation-duration {
+  font-size: 14px;
+  color: #444;
+}
+
+.reservation-price {
+  font-size: 18px;
+  color: #d32f2f;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.card-img img {
+  width: 200px;
+  height: 100%;
+  object-fit: cover;
+}
+
 .small-link {
-  color: #008000;
+  color: #2e7d32;
   text-decoration: none;
-  margin-top: 5px;
+  margin-top: 15px;
   display: inline-block;
+  font-size: 14px;
 }
 
 .small-link:hover {
   text-decoration: underline;
 }
 
-/* 예약 카드 */
-.reservation-section h3 {
-  font-size: 20px;
-  margin-bottom: 15px;
-  color: #006400;
+
+.small-link:hover {
+  text-decoration: underline;
 }
 
-.reservation-list {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.reservation-card {
-  display: flex;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 15px;
-  background: #f9f9f9;
-  align-items: flex-start;
-  gap: 20px;
-}
-
-.reservation-image {
-  width: 120px;
-  height: 80px;
-  margin-top: 20px;
-  border-radius: 5px;
-  object-fit: cover;
-}
-
-.reservation-info {
-  flex-grow: 1;
-}
-
-.reservation-title {
-  font-weight: bold;
-  font-size: 16px;
-  margin-bottom: 5px;
-}
-
-.reservation-description {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 5px;
-}
 
 .no-reservation {
   text-align: center;

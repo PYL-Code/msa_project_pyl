@@ -1,23 +1,29 @@
 <template>
-  <div class="container">
-    <!-- 사이드바 -->
+  <div class="mypage-container">
     <Sidebar />
 
-    <!-- 예약 내역 -->
-    <div class="content">
-      <h2>예약 관리</h2>
-      <div v-if="reservations.length === 0" class="no-reservation">
+    <div class="mypage-content">
+      <h2 class="page-title">예약 내역</h2>
+
+      <div v-if="reservations.length === 0" class="no-data">
         <p>예약 내역이 없습니다.</p>
       </div>
-      <div v-else class="reservation-list">
-        <div class="reservation" v-for="reservation in reservations" :key="reservation.id">
-          <img :src="reservation.imgUrl" alt="여행 이미지" class="reservation-img" />
-          <div class="reservation-info">
-            <p class="title">{{ reservation.title }}</p>
-            <p class="desc">{{ reservation.description }}</p>
-            <p><strong>가격:</strong> {{ reservation.price.toLocaleString() }}원</p>
-            <p><strong>기간:</strong> {{ reservation.duration }}</p>
-            <button class="btn danger" @click="cancelReservation(reservation.id)">예약 취소</button>
+
+      <div v-else class="reservation-cards">
+        <div class="card" v-for="reservation in reservations" :key="reservation.id">
+          <div class="card-img">
+            <img :src="reservation.imgUrl" alt="여행 이미지" />
+          </div>
+          <div class="card-info">
+            <div class="info-top">
+              <h3 class="title">{{ reservation.title }}</h3>
+              <p class="desc">{{ reservation.description }}</p>
+            </div>
+            <div class="info-bottom">
+              <p><strong>여행 기간:</strong> {{ reservation.duration }}</p>
+              <p class="price">{{ reservation.price.toLocaleString() }}원</p>
+              <button class="cancel-btn" @click="cancelReservation(reservation.id)">예약 취소</button>
+            </div>
           </div>
         </div>
       </div>
@@ -46,7 +52,7 @@ export default {
   methods: {
     async fetchReservations() {
       // const token = localStorage.getItem('token')
-      const token = createFakeJwt(); //TODO : 실제 JWT로 교체
+      const token = createFakeJwt(); // TODO: 추후 삭제 (Fake JWT)
       if (!token) {
         alert('로그인이 필요합니다.');
         this.$router.push('/signin');
@@ -54,11 +60,7 @@ export default {
       }
 
       const payload = parseJwt(token);
-      const id = payload?.id || payload?.userId || payload?.sub;
-      if (!id) {
-        console.error('토큰에 사용자 ID가 없습니다.');
-        return;
-      }
+      const id = payload?.no;
 
       try {
         const res = await axios.get(`http://localhost:9876/api/reservation/${id}`);
@@ -82,93 +84,104 @@ export default {
 };
 </script>
 
+
 <style scoped>
-.container {
+.mypage-container {
   display: flex;
-  max-width: 1200px;
-  margin: 40px auto;
+  background-color: #f4f4f4;
+  min-height: 100vh;
 }
 
-.content {
+.mypage-content {
   flex-grow: 1;
-  padding: 30px;
+  padding: 40px;
 }
 
-h2 {
-  color: #008000;
-  margin-bottom: 20px;
-  font-size: 26px;
+.page-title {
+  font-size: 28px;
+  color: #2e7d32;
+  margin-bottom: 30px;
+  font-weight: bold;
 }
 
-.no-reservation {
+.no-data {
   text-align: center;
-  color: #666;
-  margin-top: 50px;
+  color: #888;
   font-size: 16px;
+  padding: 50px 0;
 }
 
-.reservation-list {
+.reservation-cards {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 25px;
 }
 
-.reservation {
+.card {
   display: flex;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background: #f9f9f9;
+  background-color: #fff;
+  border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
 }
 
-.reservation-img {
-  width: 150px;
+.card:hover {
+  transform: translateY(-3px);
+}
+
+.card-img img {
+  width: 200px;
   height: 100%;
-  margin: 15px;
-  margin-top: 25px;
   object-fit: cover;
 }
 
-.reservation-info {
-  padding: 15px;
-  flex-grow: 1;
-}
-
-.reservation-info p {
-  margin: 5px 0;
+.card-info {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .title {
+  font-size: 20px;
   font-weight: bold;
-  font-size: 18px;
   color: #006400;
+  margin-bottom: 6px;
 }
 
 .desc {
   font-size: 14px;
   color: #555;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
-.btn {
-  background: #008000;
+.info-bottom p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.price {
+  color: #d32f2f;
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 8px;
+}
+
+.cancel-btn {
+  align-self: flex-start;
+  margin-top: 15px;
+  padding: 8px 16px;
+  background-color: #e53935;
   color: white;
-  padding: 8px 12px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  margin-top: 10px;
+  transition: background 0.2s ease;
 }
 
-.btn:hover {
-  background: #006400;
-}
-
-.danger {
-  background: #ff4444;
-}
-
-.danger:hover {
-  background: #cc0000;
+.cancel-btn:hover {
+  background-color: #b71c1c;
 }
 </style>
