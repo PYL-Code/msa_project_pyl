@@ -84,6 +84,7 @@ export default {
   },
   methods: {
     async loadUserInfo() {
+      // const token = localStorage.getItem('token')
       const token = createFakeJwt(); // TODO: 실제 JWT 적용 시 변경
       if (!token) {
         alert("로그인이 필요합니다.");
@@ -106,6 +107,7 @@ export default {
       }
     },
     async loadReservations() {
+      // const token = localStorage.getItem('token')
       const token = createFakeJwt(); // TODO: 실제 JWT 적용 시 변경
       if (!token) {
         alert("로그인이 필요합니다.");

@@ -45,6 +45,7 @@ export default {
   },
   methods: {
     async fetchReservations() {
+      // const token = localStorage.getItem('token')
       const token = createFakeJwt(); //TODO : 실제 JWT로 교체
       if (!token) {
         alert('로그인이 필요합니다.');
@@ -96,6 +97,7 @@ export default {
 h2 {
   color: #008000;
   margin-bottom: 20px;
+  font-size: 26px;
 }
 
 .no-reservation {

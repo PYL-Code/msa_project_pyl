@@ -138,7 +138,8 @@ export default {
 h2 {
   margin-bottom: 30px;
   color: #008000;
-  text-align: center;
+  text-align: left;
+  font-size: 26px;
 }
 
 .edit-form label {

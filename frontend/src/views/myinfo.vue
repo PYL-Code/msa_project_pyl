@@ -88,7 +88,7 @@ export default {
       try {
         await axios.delete(`http://localhost:9876/api/user/delete/${this.user.id}`)
         alert("회원 탈퇴가 완료되었습니다.")
-        sessionStorage.clear()
+        localStorage.clear() //TODO : 어디에 jwt 토큰 저장하는지에 따라 수정
         this.$router.push("/")
       } catch (error) {
         console.error("회원 탈퇴 오류:", error)
