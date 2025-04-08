@@ -8,7 +8,6 @@
       <!-- 회원정보 카드 -->
       <div class="user-card">
         <div class="user-profile">
-
           <div>
             <p class="username">{{ user.name }}님</p>
             <p class="userid">아이디: {{ user.userId }}</p>
@@ -28,17 +27,25 @@
         <h3>예약 내역</h3>
 
         <div v-if="reservations.length > 0" class="reservation-list">
-          <div v-for="r in reservations.slice(0, 2)" :key="r.id" class="reservation-card">
-            <p><strong>패키지:</strong> {{ r.title }}</p>
-            <p><strong>여행지:</strong> {{ r.destination }}</p>
-            <p><strong>기간:</strong> {{ r.duration }}</p>
-            <p><strong>가격:</strong> {{ r.price.toLocaleString() }}원</p>
+          <div
+              v-for="r in reservations.slice(0, 2)"
+              :key="r.id"
+              class="reservation-card"
+          >
+            <img :src="r.imgUrl" alt="여행 이미지" class="reservation-image" />
+            <div class="reservation-info">
+              <p class="reservation-title">{{ r.title }}</p>
+              <p class="reservation-description">{{ r.description }}</p>
+              <p><strong>기간:</strong> {{ r.duration }}</p>
+              <p><strong>가격:</strong> {{ r.price.toLocaleString() }}원</p>
+            </div>
           </div>
-          <router-link to="/mypage/reservations" class="small-link">→ 전체 예약 보기</router-link>
+          <router-link to="/mypage/reservations" class="small-link"
+          >→ 전체 예약 보기</router-link
+          >
         </div>
 
         <div v-else class="no-reservation">
-
           <p>현재 예약하신 내역이 없습니다.</p>
         </div>
       </div>
@@ -49,7 +56,7 @@
 <script>
 import axios from "axios";
 import Sidebar from "../components/sidebar.vue";
-import { parseJwt } from "../utils/jwtUtils.js"
+import { parseJwt } from "../utils/jwtUtils.js";
 import createFakeJwt from "../utils/fakeJwt.js";
 
 export default {
@@ -77,19 +84,18 @@ export default {
   },
   methods: {
     async loadUserInfo() {
-      // const token = localStorage.getItem('token')
-      const token = createFakeJwt(); //TODO : 추후 삭제 (Fake JWT)
+      const token = createFakeJwt(); // TODO: 실제 JWT 적용 시 변경
       if (!token) {
-        alert('로그인이 필요합니다.')
-        this.$router.push('/signin')
-        return
+        alert("로그인이 필요합니다.");
+        this.$router.push("/signin");
+        return;
       }
 
-      const payload = parseJwt(token)
-      const id = payload?.id || payload?.userId || payload?.sub
+      const payload = parseJwt(token);
+      const id = payload?.id || payload?.userId || payload?.sub;
       if (!id) {
-        console.error('토큰에 사용자 ID가 없습니다.')
-        return
+        console.error("토큰에 사용자 ID가 없습니다.");
+        return;
       }
 
       try {
@@ -100,19 +106,18 @@ export default {
       }
     },
     async loadReservations() {
-      // const token = localStorage.getItem('token')
-      const token = createFakeJwt(); //TODO : 추후 삭제 (Fake JWT)
+      const token = createFakeJwt(); // TODO: 실제 JWT 적용 시 변경
       if (!token) {
-        alert('로그인이 필요합니다.')
-        this.$router.push('/signin')
-        return
+        alert("로그인이 필요합니다.");
+        this.$router.push("/signin");
+        return;
       }
 
-      const payload = parseJwt(token)
-      const id = payload?.id || payload?.userId || payload?.sub
+      const payload = parseJwt(token);
+      const id = payload?.id || payload?.userId || payload?.sub;
       if (!id) {
-        console.error('토큰에 사용자 ID가 없습니다.')
-        return
+        console.error("토큰에 사용자 ID가 없습니다.");
+        return;
       }
 
       try {
@@ -151,13 +156,6 @@ export default {
   display: flex;
   align-items: center;
   gap: 20px;
-}
-
-.user-profile img {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background: #ddd;
 }
 
 .username {
@@ -210,20 +208,42 @@ export default {
 }
 
 .reservation-card {
+  display: flex;
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 15px;
   background: #f9f9f9;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.reservation-image {
+  width: 120px;
+  height: 80px;
+  margin-top: 20px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.reservation-info {
+  flex-grow: 1;
+}
+
+.reservation-title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.reservation-description {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 5px;
 }
 
 .no-reservation {
   text-align: center;
   color: #888;
   margin-top: 30px;
-}
-
-.no-reservation img {
-  width: 80px;
-  margin-bottom: 10px;
 }
 </style>

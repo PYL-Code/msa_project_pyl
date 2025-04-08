@@ -6,23 +6,20 @@ VALUES
     ('user004', 'strongPass!', '박지민', 'park@example.com', '010-4567-8901', '인천시 남동구 예술로 4길', '21550'),
     ('user005', 'passWord567', '최수진', 'choi@example.com', '010-5678-9012', '광주시 서구 상무대로 5길', '61947');
 
-INSERT INTO reservation (title, destination, price, duration, user_no) VALUES
--- user 1 예약
-('파리와 로마 낭만 여행', '프랑스 파리, 이탈리아 로마', 3100000, '7일', 1),
-('제주 자연 속 힐링 투어', '대한민국 제주도', 490000, '3일', 1),
+INSERT INTO reservation (title, description, price, duration, img_url, user_no) VALUES
+-- user_no = 1
+('제주도 효도 여행 패키지', '풀빌라 숙박 포함', 359000, '2박 3일', 'https://www.agoda.com/wp-content/uploads/2024/07/Jeju-Island-1244x700.jpg', 1),
+('일본 오사카 2박 3일 자유여행 패키지', '자유 일정 포함', 499000, '2박 3일', 'https://d28dpoj42hxr8c.cloudfront.net/files/topics/9586_ext_14_ko_0.jpg?v=1449751963', 1),
+('이탈리아 로마 패키지', '로마 벤츠 투어', 7990000, '8박 10일', 'https://d3b39vpyptsv01.cloudfront.net/photo/1/2/17f552dbb8d76670480cd3ec5e9ac0c2.jpg', 1),
 
--- user 2 예약
-('하와이 가족 휴양 패키지', '미국 하와이', 4100000, '7일', 2),
-('일본 온천&미식 여행', '일본 후쿠오카, 벳푸', 1600000, '4일', 2),
-('대만 야시장 먹방 투어', '대만 타이베이, 지우펀', 1300000, '3일', 2),
+-- user_no = 2
+('중국 상해/청도 일주 패키지', '중국 역사 일주', 4999000, '11박 12일', 'https://img.modetour.com/eagle/photoimg/10718/bfile/636074613108352429.png?resize=y&resize_w=603&resize_h=360&w_h_fill=y', 2),
+('아프리카 5개국 패키지', '빅토리아폭포, 세렝게티', 9990000, '8박 10일', 'https://img.modetour.com/eagle/photoimg/74692/bfile/638573534372668089.jpg?resize=y&resize_w=603&resize_h=360&w_h_fill=y', 2),
+('스페인 포르투갈 시그니처 패키지', '아그바타워/플라멩코쇼/몬세랏케이블카', 4590000, '7박 9일', 'https://img.modetour.com/eagle/photoimg/48419/bfile/636184546086922674.png?resize=y&resize_w=603&resize_h=360&w_h_fill=y', 2),
 
--- user 3 예약
-('북유럽 오로라 체험', '노르웨이, 핀란드', 3600000, '6일', 3),
-('스위스 알프스 하이킹', '스위스 인터라켄, 루체른', 2900000, '6일', 3),
-('그리스 산토리니 감성 여행', '그리스 아테네, 산토리니', 2700000, '5일', 3),
-
--- user 4 예약
-('호주 시드니 & 골드코스트', '호주 시드니, 골드코스트', 3500000, '7일', 4),
-('베트남 다낭 럭셔리 리조트', '베트남 다낭', 1200000, '4일', 4);
+-- user_no = 3
+('일본 삿포로 온천 패키지', '고품격 온천', 749000, '3박 4일', 'https://www.visit-hokkaido.jp/lsc/upfile/articleDetail/0000/0212/212_2_m.jpg', 3),
+('스페인 일주 9일 패키지', '스페인 10대 도시 완전일주', 3790000, '7박 9일', 'https://img.modetour.com/eagle/photoimg/52616/bfile/636506698368246400.jpg?resize=y&resize_w=603&resize_h=360&w_h_fill=y', 3),
+('중국 북경/만리장성 패키지', '북경 베이징 만리장성', 999000, '3박 4일', 'https://img.modetour.com/eagle/photoimg/1348/bfile/638648600476966328.jpg?resize=y&resize_w=603&resize_h=360&w_h_fill=y', 3);
 
 
